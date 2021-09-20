@@ -1,0 +1,7 @@
+$(CC) = gcc
+final:
+	$(CC) tester.c tokenizer.c -o final
+
+clean:
+	rm *.o final
+
