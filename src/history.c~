@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "history.h"
+
+List* init_history()
+{
+  List *list = malloc(sizof(List));
+  List -> root = malloc(sizeof(Item));
+  return list;
+}
+
+void add_history(List *list, char *str)
+{
+  Item *current_list -> root;
+  if(list ->root ->str == NULL)
+    {
+      current -> id = 0;
+      current -> str = str;
+      list -> root = current;
+    }
+  else
+    {
+      current=list -> root;
+      int id = 0;
+      while(current -> next != NULL)
+	{
+	  id++;
+	  current = current -> next;
+	}
+    }
+}
