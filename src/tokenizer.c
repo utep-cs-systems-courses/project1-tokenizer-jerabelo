@@ -1,12 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <tokenizer.h>
-#include <tokenizer.c>
+#include "tokenizer.h"
 
-int main()
-{
-
-}
 int space_char(char c)
 {
   if(c == ' ' || c == '\t')
@@ -18,88 +13,104 @@ int space_char(char c)
 
 int non_space_char(char c)
 {
-  if(!space_char(c))
+  if(c != ' ' || c != '\t' || c == '\0')
     {
-      return 0;
+      return 1;
     }
-  return 1;
+  return 0;
 }
 
-char *word_start(char *word)
+char *word_start(char *str)
 {
-  int pos = 0;
-  while(*(word+pos))
+  if(*str == '\0')
     {
-      if(non_space_char(*(word+pos))
-	{
-	  return word + pos;
-	}
-	pos++;
+      return '\0';
     }
-      return word + pos;
+  while(space_char(*str))
+    {
+      str++;
+    }
+  return str;
 }
 
-char *word_terminator(char *str)
+char *word_terminator(char *word)
 {
-  int pos = 0;
-  while(*(word+pos))
-    {
-      if(space_char(*(word+pos)))
-	{
-	  return word + pos;
-	}
-      pos++;
-    }
-  return word + pos;
+  while(non_space_char(*word))
+  {
+    word++;
+  }
+  return word;
 }
 
 int count_words(char *str)
 {
-  char *tmp = str;
-  int counter = 0;
-  int pos = 0;
-  tmp = word_start(tmp);
-  while(*tmp)
+  int count = 0;
+  while(*str != '\0')
     {
-      if(non_space_char(tmp))
-	{
-	  count++;
-	}
-      tmp = word_terminator(tmp);
-      tmp = word_start(tmp);
+      str = word_start(str);
+      str = word_terminator(str);
+      count++;
     }
   return count;
 }
 
- char *copy_str(char *inStr, short len)
- {
-   char *copyStr = malloc((len + 1) * sizeof(char));
-   int i = 0;
-   for(i = 0; i < len; i++)
-     {
-       copyStr[i] = inStr[i];
-     }
-   copyStr[i] ='\0';
-   return copyStr;
- }
+char *copy_str(char *inStr, short len)
+{
+   char *copyStr = (char*)malloc((len + 1) * sizeof(char));
 
- void print_tokens(char **tokens)
- {
-   while(**tokens != '\0')
+   for(int i = 0; i < len; i++)
      {
-       prinf("%s\n",*tokens);
+       *copyStr++ = *inStr++;
+     }
+   *copyStr = 0;
+   copyStr = copyStr - len;
+   return copyStr;
+}
+
+char **tokenize(char *str)
+{
+  int wordCount = count_words(str);
+
+  char **tokens = (char**) malloc((wordCount+1)*sizeof(char*));
+
+  char *end;
+  str = word_start(str);
+
+  for(int i = 0; i < wordCount; i++)
+    {
+      int wordLen = word_terminator(str) - str;
+
+      char *copyStr = (char*) malloc((wordLen+1)*sizeof(char));
+
+      copyStr = copy_str(str,wordLen);
+      *tokens = copyStr;
+
+      end = word_terminator(str);
+      str = word_start(end);
+      tokens++;
+    }
+  *tokens = 0;
+  return tokens - wordCount;
+}
+
+void print_tokens(char **tokens)
+{
+   printf("tokens printed!");
+
+   int counter = 0;
+   while(*tokens != 0)
+     {
+       printf("[%d] %s\n", counter, *tokens);
+       counter++;
        tokens++;
      }
  }
 
- void free_tokens(char **tokens)
- {
-   char **tmp = tokens;
-   while(**tmp != '\0')
+void free_tokens(char **tokens)
+{
+   while(*tokens != 0)
      {
-       free(*tmp);
-       tmp++;
+       free(*tokens);
+       tokens++;
      }
-   free(*tmp);
-   free(tokens);
  }

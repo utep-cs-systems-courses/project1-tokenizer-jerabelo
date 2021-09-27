@@ -20,6 +20,7 @@ char *word_start(char *str);
 /* Returns a pointer terminator char following *word */
 char *word_terminator(char *word);
 
+
 /* Counts the number of words in the string argument. */
 int count_words(char *str);
 

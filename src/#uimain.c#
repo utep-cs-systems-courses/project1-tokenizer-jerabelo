@@ -7,16 +7,18 @@
 
 int main()
 {
+  List *history = init_history();
   char userIn[100];
   while(1)
     {
+      printf("Enter strings")
       putchar('>');
       fgets(userIn, 100, stdin);
       printf("%s\n", userIn);
   //calling methods from tokenizer.h
   printf("%d\n",space_char(' '));
   printf("%d\n",non_space_char('d'));
-  printf("%c\n",*word_start("questions"));
+  printf("%c\n",*word_start("  questions"));
   // printf("%c\n",*word_terminator("hello say"));
   printf("%d\n",count_words("Hello world!"));
 
