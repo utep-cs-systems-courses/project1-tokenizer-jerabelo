@@ -1,11 +1,11 @@
 # compiler flags. -g for debug, -03 for optimization
 
-CFLAGS = -g -03
+CFLAGS =-g -03
 
 #first target is built by default
 all: tokenizer
 
-#history.o: history.h
+history.o: history.h
 
 tokenizer.o: tokenizer.h
 
@@ -13,7 +13,7 @@ uimain.o: history.h tokenizer.h
 
 #$@=target, $^=prerequisites
 
-tokenizer: tokenizer.o uimain.o
+tokenizer: tokenizer.o uimain.o history.o
 
 	cc -o $@ $^ $(CFLAGS)
 
