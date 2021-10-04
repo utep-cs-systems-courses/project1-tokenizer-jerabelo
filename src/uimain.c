@@ -7,21 +7,34 @@
 
 int main()
 {
-  char userIn[100];
+  int count = 0;
+  
   while(1)
     {
-      putchar('>');
-      fgets(userIn, 100, stdin);
-      printf("%s\n", userIn);
-  //calling methods from tokenizer.h
-  printf("%d\n",space_char(' '));
-  printf("%d\n",non_space_char('d'));
-  printf("%c\n",*word_start("questions"));
-  // printf("%c\n",*word_terminator("hello say"));
-  printf("%d\n",count_words("Hello world!"));
+      char userInput[100];
+      int historyNum;
+      char* historyList;
+      List *history = init_history();
 
-    }
-  return 0;
-}
+      printf("\nEnter a String. Enter 'h' to see history. Enter 'x' to exit\nEnter \ !<number>\ to       see selected history\n");
+
+      while(userInput[0] != 'x')
+	{
+	  printf(">");
+	  fgets(userInput,100,stdin);
+	  if(userInput[0] == 'x')
+	    {
+	      break;
+	    } else if (userInput[0] == '?')
+	    {
+	      break;
+	    } else if(userInput[0] == '!')
+	    {
+	      historyNum = atoi(userInput+1);
+	      if(historyNum > 0)
+		{
+		  historyTotal = get_history(history,historyNum);
+		}
+	    }
 
 
