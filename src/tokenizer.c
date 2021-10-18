@@ -36,7 +36,6 @@ char *word_start(char *str)
 
 char *word_terminator(char *word)
 {
-  int i = 0;
   while(non_space_char(*word))
   {
     word++;
@@ -46,59 +45,51 @@ char *word_terminator(char *word)
 
 int count_words(char *str)
 {
-  int count = 0;
-  while(str)
-    {
-      str = word_start(str);
-      if(!str) return count;
-      str = word_terminator(str);
-      count++;
-    }
-  return count;
+  char *wordStart, *wordEnd;
+  int totalWords = 0, count = 0;
+  while(*str != '\0') {
+    wordStart = word_start(str);
+    wordEnd = word_terminator(wordStart);
+    str = wordEnd;
+    str++;
+    totalWords++;
+  }
+  return totalWords;
 }
 
 char *copy_str(char *inStr, short len)
 {
    char *copyStr = (char*)malloc((len + 1) * sizeof(char));
-
-   for(int i = 0; i < len; i++)
+   int i;
+   for(i = 0; i < len; i++)
      {
-       *copyStr++ = *inStr++;
+       copyStr[i] = inStr[i];
      }
-   *copyStr = 0;
-   copyStr = copyStr - len;
+   copyStr[i] = '\0';
    return copyStr;
 }
 
 char **tokenize(char *str)
 {
-  int wordCount = count_words(str);
+  short size = 0, i = 0;
+  int totalWords = count_words(str);
+  char *wordStart, *wordEnd;
+  char **tokens = (char**)malloc(sizeof(char*)*(totalWords+1));
 
-  char **tokens = (char**) malloc((wordCount+1)*sizeof(char*));
-
-  char *end;
-  str = word_start(str);
-
-  for(int i = 0; i < wordCount; i++)
-    {
-      int wordLen = word_terminator(str) - str;
-
-      char *copyStr = (char*) malloc((wordLen+1)*sizeof(char));
-
-      copyStr = copy_str(str,wordLen);
-      *tokens = copyStr;
-
-      end = word_terminator(str);
-      str = word_start(end);
-      tokens++;
-    }
-  *tokens = 0;
-  return tokens - wordCount;
+  for(i = 0; i < totalWords; i++) {
+    wordStart = word_start(str);
+    wordEnd = word_terminator(wordStart);
+    size = wordEnd - wordStart;
+    tokens[i] = copy_str(wordStart, size);
+    str = word_start(wordEnd);
+  }
+  tokens[i] = '\0';
+  return tokens;
 }
 
 void print_tokens(char **tokens)
 {
-   printf("tokens printed!");
+   printf("tokens printed!\n");
    int counter = 0;
    while(*tokens != 0)
      {
